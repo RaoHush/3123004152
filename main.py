@@ -2,15 +2,15 @@ import re
 import sys
 import glob
 import jieba
-import os  # 新增导入os模块
+import os  
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
 def read_file(file_path):
-    """强化异常处理的文件读取，新增编码校验"""
+    """强化异常处理的文件读取"""
     try:
-        # 第一步：二进制模式读取以检测编码
+        #二进制模式读取以检测编码
         with open(file_path, 'rb') as f:
             raw_data = f.read()
 
@@ -20,7 +20,7 @@ def read_file(file_path):
             except UnicodeDecodeError:
                 raise ValueError("非UTF-8编码文件")
 
-        # 第二步：正式读取文本内容
+        # 正式读取文本内容
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read().replace('\u3000', ' ').replace('\xa0', ' ')
             if not content:
@@ -35,7 +35,7 @@ def read_file(file_path):
         sys.exit(1)
 
 def preprocess(text):
-    """增强版预处理：清洗+分词+过滤"""
+    """清洗+分词+过滤"""
     text = re.sub(r'[^\u4e00-\u9fa5a-zA-Z0-9]', ' ', text)
     words = [word for word in jieba.lcut(text) if len(word) > 1]
     return ' '.join(words)
@@ -89,4 +89,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()#hahahha
+    main()
