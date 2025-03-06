@@ -46,7 +46,12 @@ def main():
     output_path = sys.argv[3]
 
     orig_processed = preprocess(read_file(orig_path))
-    plag_files = sorted(glob.glob(plag_pattern))
+    #plag_files = sorted(glob.glob(plag_pattern))
+
+    if os.path.isfile(plag_pattern):
+        plag_files = [plag_pattern]
+    else:
+        plag_files = sorted(glob.glob(plag_pattern))
 
     if not plag_files:
         print("未找到抄袭文件")
