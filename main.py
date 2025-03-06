@@ -2,7 +2,7 @@ import re
 import sys
 import glob
 import jieba
-import os  # 新增导入os模块
+import os 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -26,7 +26,6 @@ def preprocess(text):
 
 
 def calc_similarity(vectorizer, orig_text, plag_text):
-    """使用预训练vectorizer的相似度计算"""
     try:
         orig_matrix = vectorizer.transform([orig_text])
         plag_matrix = vectorizer.transform([plag_text])
@@ -73,4 +72,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()#hahahha
+    main()
