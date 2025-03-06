@@ -8,15 +8,31 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 def read_file(file_path):
-    """强化异常处理的文件读取"""
+    """强化异常处理的文件读取，新增编码校验"""
     try:
+        # 第一步：二进制模式读取以检测编码
+        with open(file_path, 'rb') as f:
+            raw_data = f.read()
+
+            # 编码校验（核心新增逻辑）
+            try:
+                raw_data.decode('utf-8', errors='strict')
+            except UnicodeDecodeError:
+                raise ValueError("非UTF-8编码文件")
+
+        # 第二步：正式读取文本内容
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read().replace('\u3000', ' ').replace('\xa0', ' ')
+            if not content:
+                raise ValueError("文件内容为空")
             return content
+
+    except ValueError as ve:
+        print(f"文件读取失败: {str(ve)}")
+        sys.exit(1)
     except Exception as e:
         print(f"文件读取失败: {str(e)}")
         sys.exit(1)
-
 
 def preprocess(text):
     """增强版预处理：清洗+分词+过滤"""
