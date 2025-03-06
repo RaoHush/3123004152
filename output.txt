@@ -1,6 +1,1 @@
-orig_0.8_add.txt:0.86
-orig_0.8_del _2.txt:0.00
-orig_0.8_del.txt:0.88
-orig_0.8_dis_1.txt:0.97
-orig_0.8_dis_10.txt:0.88
-orig_0.8_dis_15.txt:0.71
+orig_0.8_add.txt:0.86p
