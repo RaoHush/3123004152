@@ -25,12 +25,12 @@ def preprocess(text):
     return ' '.join(words)
 
 
-def calc_similarity(orig_text, plag_text):
-    """带异常处理的相似度计算"""
+def calc_similarity(vectorizer, orig_text, plag_text):
+    """使用预训练vectorizer的相似度计算"""
     try:
-        vectorizer = TfidfVectorizer(token_pattern=r'(?u)\b\w+\b')
-        matrix = vectorizer.fit_transform([orig_text, plag_text])
-        return cosine_similarity(matrix[0], matrix[1])[0][0]
+        orig_matrix = vectorizer.transform([orig_text])
+        plag_matrix = vectorizer.transform([plag_text])
+        return cosine_similarity(orig_matrix, plag_matrix)[0][0]
     except Exception as e:
         print(f"计算异常: {str(e)}")
         return 0.0
@@ -47,6 +47,7 @@ def main():
 
     orig_processed = preprocess(read_file(orig_path))
     #plag_files = sorted(glob.glob(plag_pattern))
+    vectorizer = TfidfVectorizer(token_pattern=r'(?u)\b\w+\b').fit([orig_processed])
 
     if os.path.isfile(plag_pattern):
         plag_files = [plag_pattern]
@@ -62,7 +63,7 @@ def main():
         plag_content = read_file(plag_file)
         plag_processed = preprocess(plag_content)
 
-        similarity = max(0.0, min(1.0, calc_similarity(orig_processed, plag_processed)))
+        similarity = max(0.0, min(1.0, calc_similarity(vectorizer,orig_processed, plag_processed)))
         # 修改点：获取文件名并格式化输出
         filename = os.path.basename(plag_file)  # 提取纯文件名
         results.append(f"{filename}:{similarity:.2f}")  # 格式化为 文件名:评分
